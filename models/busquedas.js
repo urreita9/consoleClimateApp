@@ -11,7 +11,7 @@ class Busquedas {
 			access_token: process.env.MAPBOX_KEY,
 			language: 'es',
 			limit: '5',
-			// types: 'country%2Cregion%2Cdistrict%2Clocality',
+			types: 'country,region,district,place',
 		};
 	}
 	async ciudad(lugar = '') {
@@ -24,9 +24,14 @@ class Busquedas {
 
 			const resp = await instance.get();
 
-			console.log(resp.data);
+			return resp.data.features.map((lugar) => ({
+				id: lugar.id,
+				nombre: lugar.place_name,
+				lng: lugar.center[0],
+				lat: lugar.center[1],
+			}));
 
-			return []; //retornar ciudades que coincidad con lugar
+			//retornar ciudades que coincidad con lugar
 		} catch (error) {
 			return [];
 		}
